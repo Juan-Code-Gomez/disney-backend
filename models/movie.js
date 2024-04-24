@@ -12,13 +12,15 @@ module.exports = (sequelize, DataTypes) => {
         through: "CharacterMovie",
         foreignKey: "movieId",
         otherKey: "characterId",
+        timestamps: true,
       });
 
       // Define una relación de muchos a muchos entre Movie y Gender
       Movie.belongsToMany(models.Gender, {
         through: "GendersMovies",
-        foreignKey: "movieId",
-        otherKey: "genderId",
+        foreignKey: "MovieId",
+        otherKey: "GenderId",
+        timestamps: true,
       });
     }
   }
