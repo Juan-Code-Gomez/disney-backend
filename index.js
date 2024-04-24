@@ -1,13 +1,14 @@
 const express = require('express');
 require('dotenv').config();
+const bodyParser = require("body-parser");
+
+const genderRoute = require("./routes/gender");
+
 
 const app = express();
+app.use(bodyParser.json());
 
-app.use(express.json());
-
-app.get('/', function (req, res) {
-    res.send('Hello world with node')
-})
+app.use("/", genderRoute)
 
 app.listen(
     process.env.PORT || 3000, () =>
