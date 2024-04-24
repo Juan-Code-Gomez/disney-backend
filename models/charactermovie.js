@@ -1,53 +1,52 @@
-'use strict';
-const {
-  Model
-} = require('sequelize');
+"use strict";
+const { Model } = require("sequelize");
 
 module.exports = (sequelize, DataTypes) => {
-  class GendersMovies extends Model {
+  class CharactersMovies extends Model {
     /**
      * Helper method for defining associations.
      * This method is not a part of Sequelize lifecycle.
      * The `models/index` file will call this method automatically.
      */
-    static associate(models) {
-
-    }
+    static associate(models) {}
   }
-  
-  GendersMovies.init({
-    GenderId: {
-      type: DataTypes.INTEGER,
-      primaryKey: true,
-      references: {
-        model: 'Genders',
-        key: 'id'
+
+  CharactersMovies.init(
+    {
+      CharacterId: {
+        type: DataTypes.INTEGER,
+        primaryKey: true,
+        references: {
+          model: "Characters",
+          key: "id",
+        },
+        onDelete: "CASCADE",
       },
-      onDelete: 'CASCADE'
-    },
-    MovieId: {
-      type: DataTypes.INTEGER,
-      primaryKey: true,
-      references: {
-        model: 'Movies',
-        key: 'id'
+      MovieId: {
+        type: DataTypes.INTEGER,
+        primaryKey: true,
+        references: {
+          model: "Movies",
+          key: "id",
+        },
+        onDelete: "CASCADE",
       },
-      onDelete: 'CASCADE'
+      createdAt: {
+        allowNull: false,
+        type: DataTypes.DATE,
+      },
+      updatedAt: {
+        allowNull: false,
+        type: DataTypes.DATE,
+      },
     },
-    createdAt: {
-      allowNull: false,
-      type: DataTypes.DATE
-    },
-    updatedAt: {
-      allowNull: false,
-      type: DataTypes.DATE
+    {
+      sequelize,
+      modelName: "CharactersMovies",
+      tableName: "CharactersMovies",
+      timestamps: true, // Asegura que se utilicen los campos `createdAt` y `updatedAt`
     }
-  }, {
-    sequelize,
-    modelName: 'GendersMovies',
-    tableName: 'GendersMovies',
-    timestamps: true // Asegura que se utilicen los campos `createdAt` y `updatedAt`
-  });
-  
-  return GendersMovies;
+  );
+
+  return CharactersMovies;
 };

@@ -10,8 +10,8 @@ module.exports = (sequelize, DataTypes) => {
     static associate(models) {
       Movie.belongsToMany(models.Character, {
         through: "CharacterMovie",
-        foreignKey: "movieId",
-        otherKey: "characterId",
+        foreignKey: "MovieId",
+        otherKey: "CharacterId",
         timestamps: true,
       });
 
