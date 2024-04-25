@@ -7,6 +7,13 @@ router.post("/movie", async (req, res) => {
     const { title, date_created, image, rating, character, genderId } =
       req.body;
 
+    if (!title || !date_created || !image || !rating || !character) {
+      return res.status(400).json({
+        error:
+          "Todos los campos (title, date_created, image, rating, character) son requeridos.",
+      });
+    }
+
     const newMovie = await Movie.create({
       title: title,
       date_created: date_created,
@@ -22,7 +29,7 @@ router.post("/movie", async (req, res) => {
         await newMovie.addGender(gender, {
           through: {
             createdAt: new Date(),
-            updatedAt: new Date(), 
+            updatedAt: new Date(),
           },
         });
       } else {
@@ -35,6 +42,49 @@ router.post("/movie", async (req, res) => {
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: "Error al crear la película" });
+  }
+});
+
+router.get("/movie", async (req, res) => {
+  try {
+    const { title, date_created, rating } = req.query;
+
+    let conditions = [];
+
+    if (!title && !date_created && !rating) {
+      Movie.findAll().then((movie) => {
+        res.json(movie);
+      });
+    } else {
+      if (title) {
+        conditions.push({ title: { [Op.like]: `%${title}%` } });
+      }
+
+      if (date_created) {
+        conditions.push({ date_created });
+      }
+
+      if (rating) {
+        conditions.push({ rating });
+      }
+
+      const movies = await Movie.findAll({
+        where: {
+          [Op.or]: conditions,
+        },
+      });
+
+      if (movies.length > 0) {
+        res.json(movies);
+      } else {
+        res.send(
+          "No se encontraron peliculas con los parametros especificados"
+        );
+      }
+    }
+  } catch (error) {
+    console.log(error);
+    res.status(500).send("Ocurrio un error al realizar la consulta");
   }
 });
 

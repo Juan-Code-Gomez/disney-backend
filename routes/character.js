@@ -7,6 +7,13 @@ router.post("/character", async (req, res) => {
   try {
     const { name, age, weight, history, image, movie, movieId } = req.body;
 
+    if (!name || !age || !weight || !history || !image || !movie) {
+      return res.status(400).json({
+        error:
+          "Todos los campos (name, age, weight, history, image) son requeridos.",
+      });
+    }
+
     const newCharacter = await Character.create({
       name: name,
       age: age,
