@@ -6,6 +6,8 @@ const cors = require("cors")
 const genderRoute = require("./routes/gender");
 const movieRoute = require("./routes/movie");
 const characterRoute = require("./routes/character");
+const userRoute = require("./routes/user");
+
 
 
 const app = express();
@@ -15,6 +17,7 @@ app.use(bodyParser.json());
 app.use("/", genderRoute)
 app.use("/", movieRoute)
 app.use("/", characterRoute)
+app.use("/", userRoute)
 
 app.listen(
     process.env.PORT || 3000, () =>
