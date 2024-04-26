@@ -71,16 +71,14 @@ router.get("/character", async (req, res) => {
 
       const characters = await Character.findAll({
         where: {
-          [Op.or]: conditions,
+          [Op.and]: conditions,
         },
       });
 
       if (characters.length > 0) {
         res.json(characters);
       } else {
-        res.send(
-          "No se encontraron personajes con los parámetros especificados."
-        );
+        res.status(200).send([])
       }
     }
   } catch (error) {

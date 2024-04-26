@@ -1,5 +1,6 @@
 const express = require("express");
 const router = express.Router();
+const { Op } = require("sequelize");
 const { Movie, Gender } = require("../models");
 
 router.post("/movie", async (req, res) => {
@@ -70,16 +71,14 @@ router.get("/movie", async (req, res) => {
 
       const movies = await Movie.findAll({
         where: {
-          [Op.or]: conditions,
+          [Op.and]: conditions,
         },
       });
 
       if (movies.length > 0) {
         res.json(movies);
       } else {
-        res.send(
-          "No se encontraron peliculas con los parametros especificados"
-        );
+        res.status(200).send([])
       }
     }
   } catch (error) {
