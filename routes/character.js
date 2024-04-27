@@ -66,7 +66,7 @@ router.get("/character", async (req, res) => {
       }
 
       if (movie) {
-        conditions.push({ movie });
+        conditions.push({ movie: {[Op.like]: `%${movie}%`} });
       }
 
       const characters = await Character.findAll({
@@ -78,12 +78,52 @@ router.get("/character", async (req, res) => {
       if (characters.length > 0) {
         res.json(characters);
       } else {
-        res.status(200).send([])
+        res.status(200).send([]);
       }
     }
   } catch (error) {
     console.log(error);
     res.status(500).send("Ocurrió un error al realizar la consulta.");
+  }
+});
+
+router.put("/character/:id", async (req, res) => {
+  try {
+    const characterId = req.params.id;
+    const updatedData = req.body;
+
+    const character = await Character.findByPk(characterId);
+
+    if (!character) {
+      return res.status(404).json({ message: "Personaje no encontrado." });
+    }
+    await character.update(updatedData);
+    res.json(character);
+  } catch (error) {
+    console.log(error);
+    res
+      .status(500)
+      .json({ message: "Ocurrió un error al editar el personaje." });
+  }
+});
+
+router.delete("/character/:id", async (req, res) => {
+  try {
+    const characterId = req.params.id;
+
+    const character = await Character.findByPk(characterId);
+
+    if (!character) {
+      return res.status(404).json({ message: "Personaje no encontrado." });
+    }
+
+    await character.destroy();
+    res.json({ message: "Personaje eliminado exitosamente." });
+  } catch (error) {
+    console.log(error);
+    res
+      .status(500)
+      .json({ message: "Ocurrió un error al eliminar el personaje." });
   }
 });
 
